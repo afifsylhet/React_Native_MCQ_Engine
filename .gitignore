@@ -1,0 +1,135 @@
+# Dependencies
+node_modules/
+/.pnp
+.pnp.js
+
+# Testing
+/coverage
+
+# Production/Build
+/dist
+/build
+.expo/
+.expo-shared/
+dist/
+
+# Misc
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+web-build/
+
+# Logs
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# Editor directories and files
+.vscode/
+.idea/
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.env
+.env.local
+.env.*.local
+
+# React Native / Expo
+.gradle/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# Android
+android/
+/.android/
+.android/
+/android/app/debug
+/android/app/release
+/android/.gradle
+/android/local.properties
+*.apk
+*.aab
+build/
+
+# iOS
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+*.xcworkspace
+xcuserdata/
+*.ipa
+
+# Temporary files
+*.tmp
+tmp/
+temp/
+
+# OS
+Thumbs.db
+.DS_Store
+
+# App-specific
+APK_BUILD_REPORT.md
+BUILD_COMPLETE.json
+TASK_COMPLETION_REPORT.md
+app-release.aab
+apk-extracted/
+DELIVERY_PACKAGE/
+
+# Package managers
+yarn.lock
+pnpm-lock.yaml
+.pnpm-lock.yaml
+
+# Cache directories
+.cache/
+.eslintcache
+.babelcache
+.metro-cache/
+.watchman-cookie-*
+
+# TypeScript
+*.tsbuildinfo
+
+# Heap snapshots
+heapdump.*.heapsnapshot
+
+# Storybook
+storybook-static/
+
+# Environment & Secrets
+.secrets.json
+secrets.env
+
+# npm cache
+.npm
+
+# Workspace
+.code-workspace
+
+# Debug
+*.dSYM
+*.ipa.dSYM
+
+# Certificates & Keys (additional)
+*.cer
+*.crt
+*.pfx
+
+# Misc generated files
+*.log.json
+*.tap
+junit.xml

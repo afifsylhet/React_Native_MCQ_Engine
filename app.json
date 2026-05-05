@@ -1,0 +1,49 @@
+{
+  "expo": {
+    "name": "BD Nursing Preparation",
+    "slug": "nurseprep-app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0F7B6C"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "updates": {
+      "enabled": false
+    },
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.nurseprep.app"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#0F7B6C"
+      },
+      "permissions": [
+        "RECEIVE_BOOT_COMPLETED",
+        "VIBRATE"
+      ],
+      "package": "com.nurseprep.app"
+    },
+    "plugins": [
+      [
+        "expo-notifications",
+        {
+          "sounds": []
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "4272c113-0e2c-48bc-9f8e-f05a2eef6c26"
+      }
+    }
+  }
+}
