@@ -11,6 +11,7 @@ import { PlansScreen } from '../screens/subscription/PlansScreen';
 import { NotificationSettingsScreen } from '../screens/settings/NotificationSettingsScreen';
 import { ModuleUnavailableScreen } from '../screens/common/ModuleUnavailableScreen';
 import { ModuleMaintenanceScreen } from '../screens/common/ModuleMaintenanceScreen';
+import { InvoiceScreen } from '../screens/subscription/InvoiceScreen';
 
 const Stack = createNativeStackNavigator<ProfileStackParamList>();
 
@@ -28,6 +29,7 @@ export const ProfileNavigator = () => {
             <Stack.Screen name="HistoryDetail" component={HistoryDetailScreen} />
             <Stack.Screen name="Subscription" component={SubscriptionScreen} />
             <Stack.Screen name="Plans" component={PlansScreen} />
+            <Stack.Screen name="Invoices" component={InvoiceScreen} />
             <Stack.Screen
                 name="NotificationSettings"
                 component={NotificationSettingsScreen}

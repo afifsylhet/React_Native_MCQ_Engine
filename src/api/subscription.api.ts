@@ -110,4 +110,16 @@ export const subscriptionApi = {
             throw new Error(`Failed to cancel subscription: ${formatApiError(error)}`);
         }
     },
+
+    getPublicModuleStatuses: async (): Promise<{ examType: string; studentType: string; isLocked: boolean }[]> => {
+        try {
+            const response = await apiClient.get<{
+                data: { examType: string; studentType: string; isLocked: boolean }[];
+            }>('/subscriptions/public/module-statuses');
+            return response.data.data || [];
+        } catch (error) {
+            console.error('[subscriptionApi] Get public module statuses failed:', error);
+            return [];
+        }
+    },
 };

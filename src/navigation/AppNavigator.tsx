@@ -7,6 +7,7 @@ import { AppTabParamList } from './types';
 import { HomeNavigator } from './HomeNavigator';
 import { ExamNavigator } from './ExamNavigator';
 import { ProfileNavigator } from './ProfileNavigator';
+import { SubscriptionNavigator } from './SubscriptionNavigator';
 import { LeaderboardScreen } from '../screens/leaderboard/LeaderboardScreen';
 import { colors } from '../theme/colors';
 
@@ -77,6 +78,20 @@ export const AppNavigator = () => {
                     tabBarIcon: ({ color }) => (
                         <MaterialCommunityIcons
                             name="trophy-variant"
+                            size={24}
+                            color={color}
+                        />
+                    ),
+                }}
+            />
+            <Tab.Screen
+                name="Subscription"
+                component={SubscriptionNavigator}
+                options={{
+                    tabBarLabel: 'সাবস্ক্রিপশন',
+                    tabBarIcon: ({ color }) => (
+                        <MaterialCommunityIcons
+                            name="crown"
                             size={24}
                             color={color}
                         />

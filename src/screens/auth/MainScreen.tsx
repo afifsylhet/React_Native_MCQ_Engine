@@ -217,7 +217,7 @@ export const MainScreen: React.FC<Props> = ({ navigation }) => {
                         style={styles.sectionWrap}
                         entering={FadeInDown.delay(500)}
                     >
-                        <Text style={styles.sectionTitle}>বিডি নার্সিং প্রিপারেশণের পেছনের টিম</Text>
+                        <Text style={styles.sectionTitle}>বিডি নার্সিং প্রিপারেশণ টিম</Text>
                         <View style={styles.teamGrid}>
                             <View style={styles.teamCard}>
                                 <Image

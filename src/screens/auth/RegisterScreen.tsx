@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     View,
     Text,
@@ -15,6 +15,7 @@ import { AuthStackParamList } from '../../navigation/types';
 import { useAuth } from '../../hooks/useAuth';
 import { StudentType, ExamType } from '../../types/api.types';
 import { formatApiError } from '../../utils/formatters';
+import apiClient from '../../api/client';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'Register'>;
 
@@ -30,20 +31,22 @@ interface FormData {
 
 type FormErrors = Partial<Record<keyof FormData, string>>;
 
+interface ModuleStatus {
+    examType: string;
+    studentType: string;
+    isLocked: boolean;
+}
+
 const STRONG_PASSWORD_RE = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
 const PHONE_RE = /^\d{11}$/;
 const sanitizePhoneNumber = (value: string) => value.replace(/\D/g, '').slice(0, 11);
 
-const EXAM_TYPE_OPTIONS: { value: ExamType; label: string; hint: string }[] = [
-    { value: 'admission', label: 'ভর্তি পরীক্ষা', hint: 'ভর্তির প্রস্তুতি' },
-    { value: 'license', label: 'লাইসেন্স পরীক্ষা', hint: 'লাইসেন্সিং-এর প্রস্তুতি' },
-];
-
-const STUDENT_TYPE_OPTIONS: { value: StudentType; label: string }[] = [
-    { value: 'diploma_nursing_midwifery', label: 'ডিপ্লোমা ইন নার্সিং ও মিডওয়াইফারি' },
-    { value: 'diploma_midwifery', label: 'ডিপ্লোমা ইন মিডওয়াইফারি' },
-    { value: 'bsc_nursing', label: 'বি.এসসি. ইন নার্সিং' },
-    { value: 'post_basic_midwifery', label: 'পোস্ট বেসিক বি.এসসি. ইন মিডওয়াইফারি' },
+const ALL_STUDENT_TYPE_OPTIONS: { value: StudentType; label: string; admissionAllowed: boolean }[] = [
+    { value: 'diploma_nursing_midwifery', label: 'Diploma in Nursing Science and Midwifery', admissionAllowed: true },
+    { value: 'diploma_midwifery', label: 'Diploma in Midwifery', admissionAllowed: true },
+    { value: 'bsc_nursing', label: 'B.Sc. in Nursing', admissionAllowed: true },
+    { value: 'post_basic_bsc_nursing', label: 'Post Basic B.Sc. in Nursing', admissionAllowed: true },
+    { value: 'post_basic_bsc_midwifery', label: 'Post Basic B.Sc. in Midwifery', admissionAllowed: true },
 ];
 
 export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
@@ -61,6 +64,41 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [errors, setErrors] = useState<FormErrors>({});
+    const [moduleStatuses, setModuleStatuses] = useState<ModuleStatus[]>([]);
+
+    useEffect(() => {
+        apiClient
+            .get<{ data: ModuleStatus[] }>('/subscriptions/public/module-statuses')
+            .then((res) => setModuleStatuses(res.data?.data || []))
+            .catch(() => { });
+    }, []);
+
+    const isStudentTypeLocked = (studentTypeValue: StudentType, examTypeValue: ExamType | null): boolean => {
+        if (!examTypeValue) return false;
+        return moduleStatuses.some(
+            (s) => s.examType === examTypeValue && s.studentType === studentTypeValue && s.isLocked
+        );
+    };
+
+    const getVisibleStudentTypes = () => {
+        if (!formData.examType) return [];
+        return ALL_STUDENT_TYPE_OPTIONS.filter((opt) => {
+            // Filter out types not allowed for this exam
+            if (formData.examType === 'admission' && !opt.admissionAllowed) return false;
+            // Filter out locked types — they should not appear in the dropdown at all
+            if (isStudentTypeLocked(opt.value, formData.examType)) return false;
+            return true;
+        });
+    };
+
+    const getLockedStudentTypes = () => {
+        if (!formData.examType) return [];
+        return ALL_STUDENT_TYPE_OPTIONS.filter(
+            (opt) =>
+                (formData.examType !== 'admission' || opt.admissionAllowed) &&
+                isStudentTypeLocked(opt.value, formData.examType)
+        );
+    };
 
     const validateForm = (): boolean => {
         const next: FormErrors = {};
@@ -76,7 +114,7 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
         else if (!PHONE_RE.test(formData.phoneNumber.trim()))
             next.phoneNumber = 'মোবাইল নম্বর অবশ্যই ১১ সংখ্যার হতে হবে এবং শুধুমাত্র সংখ্যা ব্যবহার করুন';
 
-        if (!formData.examType) next.examType = 'আপনি কিসের প্রস্তুতি নিচ্ছেন তা নির্বাচন করুন';
+        if (!formData.examType) next.examType = 'আপনি কিসের প্রস্তুতি নিতে চান তা নির্বাচন করুন';
         if (!formData.studentType) next.studentType = 'আপনার প্রোগ্রাম নির্বাচন করুন';
 
         if (!formData.password) next.password = 'পাসওয়ার্ড প্রয়োজন';
@@ -179,6 +217,9 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
         </View>
     );
 
+    const visibleStudentTypes = getVisibleStudentTypes();
+    const lockedStudentTypes = getLockedStudentTypes();
+
     return (
         <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -212,22 +253,16 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
                     }
                 )}
 
-                {/* Step 1: Goal (segmented control) */}
+                {/* Exam Type — Radio Buttons */}
                 <View style={{ marginBottom: 20 }}>
-                    <Text style={{ fontSize: 14, fontWeight: '600', color: '#1F2937', marginBottom: 8 }}>
-                        আমি প্রস্তুতি নিচ্ছি
+                    <Text style={{ fontSize: 14, fontWeight: '600', color: '#1F2937', marginBottom: 12 }}>
+                        আমি প্রস্তুতি নিতে চাই
                     </Text>
-                    <View
-                        style={{
-                            flexDirection: 'row',
-                            borderWidth: 1,
-                            borderColor: errors.examType ? '#EF4444' : '#D1D5DB',
-                            borderRadius: 8,
-                            overflow: 'hidden',
-                            backgroundColor: '#F9FAFB',
-                        }}
-                    >
-                        {EXAM_TYPE_OPTIONS.map((opt, idx) => {
+                    <View style={{ gap: 10 }}>
+                        {[
+                            { value: 'admission' as ExamType, label: 'আমি ভর্তি পরীক্ষার প্রস্তুতি নিতে চাই' },
+                            { value: 'license' as ExamType, label: 'আমি লাইসেন্স পরীক্ষার প্রস্তুতি নিতে চাই' },
+                        ].map((opt) => {
                             const selected = formData.examType === opt.value;
                             return (
                                 <TouchableOpacity
@@ -237,51 +272,72 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
                                     accessibilityRole="radio"
                                     accessibilityState={{ selected }}
                                     style={{
-                                        flex: 1,
-                                        paddingVertical: 12,
+                                        flexDirection: 'row',
                                         alignItems: 'center',
-                                        backgroundColor: selected ? '#3B82F6' : 'transparent',
-                                        borderLeftWidth: idx === 0 ? 0 : 1,
-                                        borderLeftColor: '#D1D5DB',
+                                        borderWidth: 1.5,
+                                        borderColor: selected
+                                            ? '#3B82F6'
+                                            : errors.examType
+                                                ? '#EF4444'
+                                                : '#D1D5DB',
+                                        borderRadius: 10,
+                                        paddingVertical: 14,
+                                        paddingHorizontal: 16,
+                                        backgroundColor: selected ? '#EFF6FF' : '#F9FAFB',
                                     }}
                                 >
+                                    <View
+                                        style={{
+                                            width: 20,
+                                            height: 20,
+                                            borderRadius: 10,
+                                            borderWidth: 2,
+                                            borderColor: selected ? '#3B82F6' : '#9CA3AF',
+                                            marginRight: 12,
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                        }}
+                                    >
+                                        {selected && (
+                                            <View
+                                                style={{
+                                                    width: 10,
+                                                    height: 10,
+                                                    borderRadius: 5,
+                                                    backgroundColor: '#3B82F6',
+                                                }}
+                                            />
+                                        )}
+                                    </View>
                                     <Text
                                         style={{
                                             fontSize: 14,
-                                            fontWeight: '600',
-                                            color: selected ? '#FFFFFF' : '#1F2937',
+                                            color: selected ? '#1D4ED8' : '#1F2937',
+                                            fontWeight: selected ? '600' : '400',
+                                            flex: 1,
                                         }}
                                     >
                                         {opt.label}
-                                    </Text>
-                                    <Text
-                                        style={{
-                                            fontSize: 11,
-                                            marginTop: 2,
-                                            color: selected ? '#DBEAFE' : '#6B7280',
-                                        }}
-                                    >
-                                        {opt.hint}
                                     </Text>
                                 </TouchableOpacity>
                             );
                         })}
                     </View>
                     {errors.examType && (
-                        <Text style={{ color: '#EF4444', fontSize: 12, marginTop: 4 }}>
+                        <Text style={{ color: '#EF4444', fontSize: 12, marginTop: 6 }}>
                             {errors.examType}
                         </Text>
                     )}
                 </View>
 
-                {/* Step 2: Program (revealed after goal is chosen) */}
-                {formData.examType && (
+                {/* Student Type — shown after exam type selected */}
+                {formData.examType && visibleStudentTypes.length > 0 && (
                     <View style={{ marginBottom: 20 }}>
                         <Text style={{ fontSize: 14, fontWeight: '600', color: '#1F2937', marginBottom: 8 }}>
                             আমার প্রোগ্রাম
                         </Text>
                         <View style={{ gap: 8 }}>
-                            {STUDENT_TYPE_OPTIONS.map((opt) => {
+                            {visibleStudentTypes.map((opt) => {
                                 const selected = formData.studentType === opt.value;
                                 return (
                                     <TouchableOpacity
@@ -300,7 +356,9 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
                                             borderRadius: 8,
                                             paddingVertical: 12,
                                             paddingHorizontal: 16,
-                                            backgroundColor: selected ? '#EFF6FF' : '#F9FAFB',
+                                            backgroundColor: selected
+                                                ? '#EFF6FF'
+                                                : '#F9FAFB',
                                             flexDirection: 'row',
                                             alignItems: 'center',
                                         }}
@@ -311,7 +369,9 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
                                                 height: 18,
                                                 borderRadius: 9,
                                                 borderWidth: 2,
-                                                borderColor: selected ? '#3B82F6' : '#9CA3AF',
+                                                borderColor: selected
+                                                    ? '#3B82F6'
+                                                    : '#9CA3AF',
                                                 marginRight: 12,
                                                 alignItems: 'center',
                                                 justifyContent: 'center',
@@ -333,6 +393,7 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
                                                 fontSize: 14,
                                                 color: '#1F2937',
                                                 fontWeight: selected ? '600' : '400',
+                                                flex: 1,
                                             }}
                                         >
                                             {opt.label}
@@ -451,6 +512,30 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
                         </Text>
                     )}
                 </TouchableOpacity>
+
+                {/* Coming soon — locked types */}
+                {lockedStudentTypes.length > 0 && (
+                    <View
+                        style={{
+                            marginBottom: 16,
+                            paddingVertical: 12,
+                            paddingHorizontal: 16,
+                            backgroundColor: '#F3F4F6',
+                            borderRadius: 8,
+                            borderWidth: 1,
+                            borderColor: '#E5E7EB',
+                        }}
+                    >
+                        <Text style={{ fontSize: 12, color: '#6B7280', marginBottom: 6, fontWeight: '600' }}>
+                            শীঘ্রই আসছে
+                        </Text>
+                        {lockedStudentTypes.map((opt) => (
+                            <Text key={opt.value} style={{ fontSize: 13, color: '#9CA3AF', marginBottom: 2 }}>
+                                • {opt.label}
+                            </Text>
+                        ))}
+                    </View>
+                )}
 
                 <View
                     style={{ alignItems: 'center', flexDirection: 'row', justifyContent: 'center' }}

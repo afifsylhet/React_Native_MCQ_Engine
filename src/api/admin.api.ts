@@ -291,6 +291,20 @@ export const adminApi = {
         return response.data.data;
     },
 
+    /**
+     * Get all invoice/subscription records for a specific user (admin only)
+     */
+    getUserInvoices: async (
+        userId: string,
+        page: number = 1,
+        limit: number = 20
+    ): Promise<AdminSubscriptionsResponse> => {
+        const response = await apiClient.get(
+            `/subscriptions/admin/user/${userId}/invoices?page=${page}&limit=${limit}`
+        );
+        return response.data.data;
+    },
+
     // ========== DASHBOARD ==========
 
     /**

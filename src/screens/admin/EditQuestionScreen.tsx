@@ -45,7 +45,7 @@ const STUDENT_TYPE_OPTIONS: Array<{ value: QuestionFormData['studentType']; labe
     { value: 'diploma_midwifery', label: 'Diploma in Midwifery' },
     { value: 'diploma_nursing_midwifery', label: 'Diploma in Nursing & Midwifery' },
     { value: 'bsc_nursing', label: 'BSc Nursing' },
-    { value: 'post_basic_midwifery', label: 'Post Basic Midwifery' },
+    { value: 'post_basic_midwifery', label: 'Post Basic in B.Sc Nursing' },
 ];
 
 const EXAM_TYPE_OPTIONS: Array<{ value: QuestionFormData['examType']; label: string }> = [

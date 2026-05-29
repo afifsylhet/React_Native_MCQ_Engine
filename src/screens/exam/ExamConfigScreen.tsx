@@ -616,7 +616,7 @@ export const ExamConfigScreen: React.FC<ExamConfigScreenProps> = ({
                                     justifyContent: 'space-between',
                                 }}
                             >
-                                {[25, 50, 75, 100].map((count) => (
+                                {[25, 50, 100].map((count) => (
                                     <TouchableOpacity
                                         key={count}
                                         onPress={() => setQuestionCount(count)}

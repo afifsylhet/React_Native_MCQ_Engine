@@ -19,9 +19,9 @@ import Toast from 'react-native-toast-message';
 const STUDENT_TYPE_LABEL: Record<string, string> = {
     diploma_midwifery: 'ডিপ্লোমা ইন মিডওয়াইফারি',
     diploma_nursing_midwifery: 'ডিপ্লোমা ইন নার্সিং ও মিডওয়াইফারি',
-    bsc_midwifery: 'বিএসসি ইন মিডওয়াইফারি',
-    bsc_nursing_midwifery: 'বিএসসি ইন নার্সিং ও মিডওয়াইফারি',
-    both: 'উভয়',
+    bsc_nursing: 'বি.এসসি. ইন নার্সিং',
+    post_basic_midwifery: 'পোস্ট বেসিক বি.এসসি. ইন নার্সিং',
+    bsc_midwifery: 'পোস্ট বেসিক বি.এসসি. ইন নার্সিং',
 };
 
 const EXAM_TYPE_LABEL: Record<string, string> = {

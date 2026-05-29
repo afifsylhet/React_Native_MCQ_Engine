@@ -43,7 +43,8 @@ export const queryKeys = {
     subscription: {
         my: ['subscription', 'my'] as const,
         plans: ['subscription', 'plans'] as const,
-        history: ['subscription', 'history'] as const,
+        history: () => ['subscription', 'history'] as const,
+        weeklyQuota: ['subscription', 'weekly-quota'] as const,
     },
 
     notifications: {

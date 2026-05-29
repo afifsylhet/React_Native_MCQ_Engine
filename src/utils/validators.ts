@@ -20,8 +20,8 @@ export const registerSchema = z
         studentType: z.enum([
             'diploma_midwifery',
             'diploma_nursing_midwifery',
-            'bsc_midwifery',
-            'bsc_nursing_midwifery',
+            'bsc_nursing',
+            'post_basic_midwifery',
         ]),
     })
     .refine((data) => data.password === data.confirmPassword, {

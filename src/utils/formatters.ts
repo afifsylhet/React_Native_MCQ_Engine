@@ -194,11 +194,16 @@ export const maskName = (fullName: string): string => {
 
 export const getStudentTypeLabel = (studentType: string): string => {
     const labels: Record<string, string> = {
-        diploma_midwifery: 'ডিপ্লোমা ইন মিডওয়াইফারি',
-        diploma_nursing_midwifery: 'ডিপ্লোমা ইন নার্সিং ও মিডওয়াইফারি',
-        bsc_midwifery: 'বিএসসি ইন মিডওয়াইফারি',
-        post_basic_midwifery: 'পোস্ট বেসিক মিডওয়াইফারি',
-        bsc_nursing_midwifery: 'বিএসসি ইন নার্সিং ও মিডওয়াইফারি',
+        // 5 approved student types (Bengali labels)
+        diploma_nursing_midwifery: 'Diploma in Nursing Science and Midwifery',
+        diploma_midwifery: 'Diploma in Midwifery',
+        bsc_nursing: 'B.Sc. in Nursing',
+        post_basic_bsc_nursing: 'Post Basic B.Sc. in Nursing',
+        post_basic_bsc_midwifery: 'Post Basic B.Sc. in Midwifery',
+        // Legacy mappings
+        diploma_nursing: 'Diploma in Nursing Science',
+        post_basic_midwifery: 'Post Basic B.Sc. in Nursing',
+        bsc_midwifery: 'Post Basic B.Sc. in Nursing',
     };
     return labels[studentType] || studentType;
 };

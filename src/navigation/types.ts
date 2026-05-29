@@ -94,6 +94,7 @@ export type ProfileStackParamList = {
     ChangePassword: undefined;
     Subscription: undefined;
     Plans: undefined;
+    Invoices: undefined;
     NotificationSettings: undefined;
     ModuleUnavailable: {
         moduleLabel?: string;
@@ -131,12 +132,20 @@ export type AdminStackParamList = {
     CreateNotice: undefined;
 };
 
+// Subscription Stack Parameters
+export type SubscriptionStackParamList = {
+    MySubscription: undefined;
+    Plans: undefined;
+    SubscriptionInfo: undefined;
+    Invoices: undefined;
+};
+
 // App Tab Parameters
 export type AppTabParamList = {
     Home: NavigatorScreenParams<HomeStackParamList>;
     Exams: NavigatorScreenParams<ExamStackParamList>;
     Leaderboard: undefined;
-    Admin: NavigatorScreenParams<AdminStackParamList>;
+    Subscription: NavigatorScreenParams<SubscriptionStackParamList>;
     Profile: NavigatorScreenParams<ProfileStackParamList>;
 };
 

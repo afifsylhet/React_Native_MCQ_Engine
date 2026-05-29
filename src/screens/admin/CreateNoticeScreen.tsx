@@ -31,11 +31,10 @@ const TARGET_BLUEPRINT: Array<{ examType: 'admission' | 'license'; studentType: 
     { examType: 'admission', studentType: 'diploma_midwifery', label: 'Diploma in Midwifery' },
     { examType: 'admission', studentType: 'diploma_nursing_midwifery', label: 'Diploma in Nursing Science and Midwifery' },
     { examType: 'admission', studentType: 'bsc_nursing', label: 'B.Sc. In Nursing' },
-    { examType: 'admission', studentType: 'post_basic_midwifery', label: 'Post Basic in Midwifery' },
     { examType: 'license', studentType: 'diploma_midwifery', label: 'Diploma in Midwifery' },
     { examType: 'license', studentType: 'diploma_nursing_midwifery', label: 'Diploma in Nursing Science and Midwifery' },
     { examType: 'license', studentType: 'bsc_nursing', label: 'B.Sc. In Nursing' },
-    { examType: 'license', studentType: 'post_basic_midwifery', label: 'Post Basic in Midwifery' },
+    { examType: 'license', studentType: 'post_basic_midwifery', label: 'Post Basic in B.Sc Nursing' },
 ];
 
 const FALLBACK_TARGET_MODULES: TargetModule[] = TARGET_BLUEPRINT.map((item) => ({

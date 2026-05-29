@@ -51,9 +51,13 @@ export interface User {
 }
 
 export type StudentType =
-    | 'diploma_midwifery'
     | 'diploma_nursing_midwifery'
+    | 'diploma_nursing'
     | 'bsc_nursing'
+    | 'post_basic_bsc_nursing'
+    | 'post_basic_bsc_midwifery'
+    // Legacy codes for backward compatibility
+    | 'diploma_midwifery'
     | 'post_basic_midwifery'
     | 'bsc_midwifery';
 

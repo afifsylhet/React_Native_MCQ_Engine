@@ -49,7 +49,7 @@ export const useSubscribeToPlan = () => {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: queryKeys.subscription.my });
             queryClient.invalidateQueries({
-                queryKey: queryKeys.subscription.history,
+                queryKey: queryKeys.subscription.history(),
             });
         },
     });

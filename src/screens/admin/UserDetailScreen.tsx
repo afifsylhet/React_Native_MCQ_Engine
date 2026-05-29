@@ -31,8 +31,9 @@ const ROLE_LABEL: Record<string, string> = {
 const STUDENT_TYPE_LABEL: Record<string, string> = {
     diploma_midwifery: 'ডিপ্লোমা ইন মিডওয়াইফারি',
     diploma_nursing_midwifery: 'ডিপ্লোমা ইন নার্সিং ও মিডওয়াইফারি',
-    bsc_midwifery: 'বিএসসি ইন মিডওয়াইফারি',
-    bsc_nursing_midwifery: 'বিএসসি ইন নার্সিং ও মিডওয়াইফারি',
+    bsc_nursing: 'বি.এসসি. ইন নার্সিং',
+    post_basic_midwifery: 'পোস্ট বেসিক বি.এসসি. ইন নার্সিং',
+    bsc_midwifery: 'পোস্ট বেসিক বি.এসসি. ইন নার্সিং',
 };
 
 const EXAM_TYPE_LABEL: Record<string, string> = {
@@ -42,6 +43,22 @@ const EXAM_TYPE_LABEL: Record<string, string> = {
 const PLAN_PRICE: Record<AdminPlanId, number> = {
     quarterly: 300,
     half_yearly: 500,
+};
+
+const INV_STATUS_CONFIG: Record<string, { label: string; color: string; bg: string }> = {
+    approved: { label: 'অনুমোদিত', color: '#166534', bg: '#DCFCE7' },
+    pending: { label: 'অপেক্ষামাণ', color: '#92400E', bg: '#FEF3C7' },
+    rejected: { label: 'প্রত্যাখ্যাত', color: '#991B1B', bg: '#FEE2E2' },
+    expired: { label: 'মেয়াদোত্তীর্ণ', color: '#6B7280', bg: '#F3F4F6' },
+};
+
+const formatInvDate = (dateStr?: string | null) => {
+    if (!dateStr) return '—';
+    return new Date(dateStr).toLocaleDateString('bn-BD', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+    });
 };
 
 interface UserInfo {
@@ -110,6 +127,15 @@ export const UserDetailScreen: React.FC<AdminStackScreenProps<'UserDetail'>> = (
 
     const user = userData;
     const activeSub = user?.activeSubscription;
+    const resolvedUserId = user?._id || user?.id || userId;
+
+    const { data: invoicesData, isLoading: invoicesLoading } = useQuery({
+        queryKey: ['admin-user-invoices', resolvedUserId],
+        queryFn: () => adminApi.getUserInvoices(resolvedUserId!),
+        enabled: !!resolvedUserId,
+    });
+
+    const invoices = invoicesData?.subscriptions || [];
 
     const subscribeMutation = useMutation({
         mutationFn: (plan: AdminPlanId) => {
@@ -124,6 +150,7 @@ export const UserDetailScreen: React.FC<AdminStackScreenProps<'UserDetail'>> = (
                 text2: 'ইউজারকে জানানো হয়েছে।',
             });
             queryClient.invalidateQueries({ queryKey: ['admin-user', userId || email] });
+            queryClient.invalidateQueries({ queryKey: ['admin-user-invoices', resolvedUserId] });
             queryClient.invalidateQueries({ queryKey: ['admin-users'] });
             queryClient.invalidateQueries({ queryKey: ['admin-active-subscriptions'] });
         },
@@ -148,6 +175,7 @@ export const UserDetailScreen: React.FC<AdminStackScreenProps<'UserDetail'>> = (
                 text2: 'ইউজারকে জানানো হয়েছে।',
             });
             queryClient.invalidateQueries({ queryKey: ['admin-user', userId || email] });
+            queryClient.invalidateQueries({ queryKey: ['admin-user-invoices', resolvedUserId] });
             queryClient.invalidateQueries({ queryKey: ['admin-users'] });
             queryClient.invalidateQueries({ queryKey: ['admin-active-subscriptions'] });
         },
@@ -446,6 +474,81 @@ export const UserDetailScreen: React.FC<AdminStackScreenProps<'UserDetail'>> = (
                             </View>
                         )}
                     </View>
+                </View>
+
+                {/* Invoice History */}
+                <View style={styles.section}>
+                    <Text variant="lg" weight="semibold" color="textPrimary" style={styles.sectionTitle}>
+                        ইনভয়েস ইতিহাস
+                    </Text>
+
+                    {invoicesLoading && (
+                        <View style={{ alignItems: 'center', paddingVertical: 20 }}>
+                            <ActivityIndicator size="small" color={colors.primary} />
+                        </View>
+                    )}
+
+                    {!invoicesLoading && invoices.length === 0 && (
+                        <View style={[styles.infoCard, { paddingVertical: 20, alignItems: 'center' }]}>
+                            <Text variant="sm" color="textSecondary">কোনো ইনভয়েস পাওয়া যায়নি</Text>
+                        </View>
+                    )}
+
+                    {invoices.map((inv: any) => {
+                        const sc = INV_STATUS_CONFIG[inv.status] || INV_STATUS_CONFIG.pending;
+                        const rows = [
+                            { label: 'ইনভয়েস আইডি', value: inv._id ? String(inv._id).slice(-10).toUpperCase() : '—' },
+                            { label: 'ক্রয়ের তারিখ', value: formatInvDate(inv.createdAt) },
+                            { label: 'প্যাকেজের নাম', value: PLAN_LABEL[inv.plan as AdminPlanId] || inv.plan || '—' },
+                            { label: 'পরিশোধিত পরিমাণ', value: inv.paymentAmount ? `৳${inv.paymentAmount}` : '—' },
+                            { label: 'ট্রানজেকশন আইডি', value: inv.transactionId || '—' },
+                            { label: 'সক্রিয়করণের তারিখ', value: formatInvDate(inv.startDate) },
+                            { label: 'মেয়াদ শেষের তারিখ', value: formatInvDate(inv.endDate) },
+                            { label: 'পেমেন্টের অবস্থা', value: sc.label },
+                        ];
+                        return (
+                            <View
+                                key={inv._id}
+                                style={[styles.infoCard, { marginBottom: 12 }]}
+                            >
+                                {/* Card header: plan name + status badge */}
+                                <View
+                                    style={{
+                                        flexDirection: 'row',
+                                        justifyContent: 'space-between',
+                                        alignItems: 'center',
+                                        paddingHorizontal: 16,
+                                        paddingVertical: 12,
+                                    }}
+                                >
+                                    <Text variant="md" weight="bold" color="textPrimary">
+                                        {PLAN_LABEL[inv.plan as AdminPlanId] || inv.plan}
+                                    </Text>
+                                    <View
+                                        style={{
+                                            paddingHorizontal: 10,
+                                            paddingVertical: 4,
+                                            backgroundColor: sc.bg,
+                                            borderRadius: 20,
+                                        }}
+                                    >
+                                        <Text variant="xs" weight="semibold" style={{ color: sc.color }}>
+                                            {sc.label}
+                                        </Text>
+                                    </View>
+                                </View>
+
+                                <View style={styles.divider} />
+
+                                {rows.map((row, idx) => (
+                                    <View key={row.label}>
+                                        <InfoRow label={row.label} value={row.value} />
+                                        {idx < rows.length - 1 && <View style={styles.divider} />}
+                                    </View>
+                                ))}
+                            </View>
+                        );
+                    })}
                 </View>
 
                 {/* User Statistics */}

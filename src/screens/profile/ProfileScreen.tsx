@@ -889,6 +889,74 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ navigation }) => {
                             </Card>
                         </TouchableOpacity>
 
+                        {/* Invoice History */}
+                        <TouchableOpacity
+                            onPress={() => navigation.navigate('Invoices' as never)}
+                            activeOpacity={0.7}
+                        >
+                            <Card>
+                                <View
+                                    style={{
+                                        flexDirection: 'row',
+                                        justifyContent: 'space-between',
+                                        alignItems: 'center',
+                                    }}
+                                >
+                                    <View
+                                        style={{
+                                            flexDirection: 'row',
+                                            alignItems: 'center',
+                                            gap: spacing.md,
+                                        }}
+                                    >
+                                        <View
+                                            style={{
+                                                width: 40,
+                                                height: 40,
+                                                borderRadius: spacing.borderRadius.md,
+                                                backgroundColor: colors.primaryLight,
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
+                                            }}
+                                        >
+                                            <MaterialCommunityIcons
+                                                name="receipt"
+                                                size={20}
+                                                color={colors.primary}
+                                            />
+                                        </View>
+                                        <View>
+                                            <Text
+                                                style={{
+                                                    fontSize: typography.scale.sm.fontSize,
+                                                    fontFamily: typography.fontBody,
+                                                    fontWeight: typography.weights.semibold,
+                                                    color: colors.textPrimary,
+                                                }}
+                                            >
+                                                ইনভয়েস ইতিহাস
+                                            </Text>
+                                            <Text
+                                                style={{
+                                                    fontSize: typography.scale.xs.fontSize,
+                                                    fontFamily: typography.fontBody,
+                                                    color: colors.textSecondary,
+                                                    marginTop: spacing.xs,
+                                                }}
+                                            >
+                                                আপনার পেমেন্ট রেকর্ড দেখুন
+                                            </Text>
+                                        </View>
+                                    </View>
+                                    <MaterialCommunityIcons
+                                        name="chevron-right"
+                                        size={24}
+                                        color={colors.textSecondary}
+                                    />
+                                </View>
+                            </Card>
+                        </TouchableOpacity>
+
                         {/* Notification Settings */}
                         <TouchableOpacity
                             onPress={() => navigation.navigate('NotificationSettings' as never)}

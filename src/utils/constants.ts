@@ -1,11 +1,11 @@
 import { StudentType } from '../types/api.types';
 
 export const STUDENT_TYPES: Array<{ value: StudentType; label: string }> = [
+    { value: 'diploma_nursing_midwifery', label: 'Diploma in Nursing Science and Midwifery' },
     { value: 'diploma_midwifery', label: 'Diploma in Midwifery' },
-    { value: 'diploma_nursing_midwifery', label: 'Diploma in Nursing Science & Midwifery' },
-    { value: 'post_basic_midwifery', label: 'Post Basic Midwifery' },
-    { value: 'bsc_midwifery', label: 'B.Sc in Midwifery' },
-    { value: 'bsc_nursing_midwifery', label: 'B.Sc in Nursing & Midwifery' },
+    { value: 'bsc_nursing', label: 'B.Sc. in Nursing' },
+    { value: 'post_basic_bsc_nursing', label: 'Post Basic B.Sc. in Nursing' },
+    { value: 'post_basic_bsc_midwifery', label: 'Post Basic B.Sc. in Midwifery' },
 ];
 
 export const EXAM_CATEGORIES = [

@@ -73,7 +73,7 @@ export const PlansScreen: React.FC<PlansScreenProps> = ({ navigation }) => {
             period: '/চিরকাল',
             description: 'প্রত্যেক নতুন ব্যবহারকারীর জন্য ডিফল্ট প্ল্যান',
             features: [
-                { icon: 'check', text: 'মাসে ৫টি পূর্বের পরীক্ষার সুযোগ', included: true },
+                { icon: 'check', text: 'সাপ্তাহিক ৪০০ প্রশ্নের সীমা', included: true },
                 { icon: 'check', text: 'পূর্বের সালের প্রশ্নে অ্যাক্সেস', included: true },
                 { icon: 'close', text: 'মডেল টেস্ট', included: false },
                 { icon: 'close', text: 'বিষয়ভিত্তিক অনুশীলন', included: false },
@@ -87,7 +87,7 @@ export const PlansScreen: React.FC<PlansScreenProps> = ({ navigation }) => {
             period: '/৩ মাস',
             description: 'মনোযোগী পরীক্ষা প্রস্তুতির জন্য দারুণ',
             features: [
-                { icon: 'check', text: 'সীমাহীন পরীক্ষা', included: true },
+                { icon: 'check', text: 'সাপ্তাহিক ৯০০ প্রশ্নের সীমা', included: true },
                 { icon: 'check', text: 'বিস্তারিত বিশ্লেষণ', included: true },
                 { icon: 'check', text: '৯০ দিনের অ্যাক্সেস', included: true },
                 { icon: 'check', text: 'সাপ্তাহিক লিডারবোর্ড', included: true },
@@ -103,7 +103,7 @@ export const PlansScreen: React.FC<PlansScreenProps> = ({ navigation }) => {
             badge: 'জনপ্রিয়',
             isPopular: true,
             features: [
-                { icon: 'check', text: '৩ মাসের সব সুবিধা', included: true },
+                { icon: 'check', text: 'সাপ্তাহিক ১২০০ প্রশ্নের সীমা', included: true },
                 { icon: 'check', text: 'ছোট প্ল্যানের তুলনায় সাশ্রয়', included: true },
                 { icon: 'check', text: '১৮০ দিনের অ্যাক্সেস', included: true },
                 { icon: 'check', text: 'সাপ্তাহিক লিডারবোর্ড', included: true },
