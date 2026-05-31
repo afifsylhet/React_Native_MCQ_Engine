@@ -130,6 +130,7 @@ export type AdminStackParamList = {
     PreparationModuleManagement: undefined;
     NoticeManagement: undefined;
     CreateNotice: undefined;
+    SupportSettings: undefined;
 };
 
 // Subscription Stack Parameters

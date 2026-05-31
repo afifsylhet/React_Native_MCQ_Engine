@@ -11,3 +11,4 @@ export { SubscriptionManagementScreen } from './SubscriptionManagementScreen';
 export { PreparationModuleManagementScreen } from './PreparationModuleManagementScreen';
 export { NoticeManagementScreen } from './NoticeManagementScreen';
 export { CreateNoticeScreen } from './CreateNoticeScreen';
+export { SupportSettingsScreen } from './SupportSettingsScreen';

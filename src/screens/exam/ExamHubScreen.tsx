@@ -79,8 +79,8 @@ export const ExamHubScreen: React.FC<ExamHubScreenProps> = ({ navigation }) => {
 
     const isFreeUser = !!quota && !quota.hasActiveSubscription;
     const pastExamSubtitle =
-        isFreeUser && quota && quota.remaining !== null
-            ? `এই মাসে ${quota.monthlyQuota}টির মধ্যে ${quota.remaining}টি ফ্রি সুযোগ বাকি`
+        isFreeUser && quota && quota.remaining !== null && quota.limit !== null
+            ? `ফ্রি প্ল্যানে মোট ${quota.limit}টির মধ্যে ${quota.remaining}টি প্রশ্ন বাকি`
             : undefined;
     const lockedSubtitle = isFreeUser ? 'আনলক করতে সাবস্ক্রাইব করুন' : undefined;
 

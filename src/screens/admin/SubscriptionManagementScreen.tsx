@@ -25,13 +25,13 @@ import { AdminStackScreenProps } from '../../navigation/types';
 
 type PlanId = 'quarterly' | 'half_yearly';
 const PLAN_OPTIONS: { id: PlanId; label: string; priceBdt: number }[] = [
-    { id: 'quarterly', label: '৩ মাস', priceBdt: 300 },
-    { id: 'half_yearly', label: '৬ মাস', priceBdt: 500 },
+    { id: 'quarterly', label: '৪ মাস', priceBdt: 300 },
+    { id: 'half_yearly', label: '৪ মাস', priceBdt: 500 },
 ];
 
 const PLAN_SHORT_LABEL: Record<string, string> = {
-    quarterly: '৩ মাস',
-    half_yearly: '৬ মাস',
+    quarterly: '৪ মাস',
+    half_yearly: '৪ মাস',
 };
 
 type Tab = 'pending' | 'active';

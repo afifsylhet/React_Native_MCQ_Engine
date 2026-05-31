@@ -165,6 +165,13 @@ export const AdminDashboardScreen: React.FC<AdminStackScreenProps<'AdminDashboar
                 (navigation as any).getParent()?.navigate('QuestionsTab'),
         },
         {
+            title: 'Support settings',
+            description: 'Update payment and support contact info',
+            iconName: 'headset',
+            color: colors.accent,
+            onPress: () => navigation.navigate('SupportSettings'),
+        },
+        {
             title: 'রিপোর্ট পর্যালোচনা',
             description: 'রিপোর্ট করা কনটেন্ট পরিচালনা করুন',
             iconName: 'shield-alert',

@@ -18,12 +18,13 @@ import {
     PreparationModuleManagementScreen,
     NoticeManagementScreen,
     CreateNoticeScreen,
+    SupportSettingsScreen,
 } from '../screens/admin';
 import { colors } from '../theme/colors';
 
 // --- Typed stack navigators for each admin tab ---
 
-type DashboardStackParamList = Pick<AdminStackParamList, 'AdminDashboard'>;
+type DashboardStackParamList = Pick<AdminStackParamList, 'AdminDashboard' | 'SupportSettings'>;
 type UsersStackParamList = Pick<AdminStackParamList, 'UserManagement' | 'UserDetail'>;
 type QuestionsStackParamList = Pick<AdminStackParamList, 'QuestionManagement' | 'CreateQuestion' | 'QuestionDetail' | 'EditQuestion'>;
 type ReportsStackParamList = Pick<AdminStackParamList, 'ReportManagement' | 'ReportDetail'>;
@@ -53,6 +54,11 @@ const DashboardStackScreen = () => (
             name="AdminDashboard"
             component={AdminDashboardScreen}
             options={{ headerShown: false }}
+        />
+        <DashboardStack.Screen
+            name="SupportSettings"
+            component={SupportSettingsScreen}
+            options={{ headerTitle: 'Support Settings' }}
         />
     </DashboardStack.Navigator>
 );

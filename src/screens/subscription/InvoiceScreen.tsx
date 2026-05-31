@@ -14,8 +14,8 @@ import { queryKeys } from '../../api/queryClient';
 type Props = { navigation: { goBack: () => void } };
 
 const PLAN_LABELS: Record<string, string> = {
-    quarterly: '৩ মাসের প্ল্যান',
-    half_yearly: '৬ মাসের প্ল্যান',
+    quarterly: '৪ মাসের প্ল্যান',
+    half_yearly: '৪ মাসের প্ল্যান',
 };
 
 const STATUS_LABELS: Record<string, { label: string; color: string; bg: string }> = {

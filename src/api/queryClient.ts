@@ -63,4 +63,8 @@ export const queryKeys = {
             ['notice', 'list', page, activeOnly] as const,
         detail: (id: string) => ['notice', 'detail', id] as const,
     },
+
+    settings: {
+        support: ['settings', 'support'] as const,
+    },
 };

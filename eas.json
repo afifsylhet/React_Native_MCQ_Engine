@@ -1,16 +1,23 @@
 {
   "cli": {
-    "version": ">= 10.0.0"
+    "version": ">= 10.0.0",
+    "appVersionSource": "local"
   },
   "build": {
     "preview": {
       "android": {
-        "buildType": "apk"
+        "buildType": "apk",
+        "env": {
+          "EXPO_PUBLIC_API_URL": "https://mcq.developerafif.tech/api/v1"
+        }
       }
     },
     "production": {
       "android": {
-        "buildType": "app-bundle"
+        "buildType": "apk",
+        "env": {
+          "EXPO_PUBLIC_API_URL": "https://mcq.developerafif.tech/api/v1"
+        }
       }
     }
   }

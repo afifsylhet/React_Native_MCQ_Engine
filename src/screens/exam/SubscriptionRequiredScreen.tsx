@@ -22,13 +22,13 @@ export const SubscriptionRequiredScreen: React.FC<Props> = ({
 
     const title =
         reason === 'quota_exceeded'
-            ? 'মাসিক ফ্রি কোটা শেষ'
+            ? 'ফ্রি প্রশ্ন সীমা শেষ'
             : 'সাবস্ক্রিপশন প্রয়োজন';
 
     const subtitle =
         message ||
         (reason === 'quota_exceeded'
-            ? 'এই মাসের ৫টি ফ্রি পূর্বের পরীক্ষার সুযোগ আপনি ব্যবহার করে ফেলেছেন। সীমাহীনভাবে অনুশীলন চালিয়ে যেতে সাবস্ক্রাইব করুন।'
+            ? 'ফ্রি প্ল্যানে সর্বোচ্চ ৫০০টি প্রশ্ন ব্যবহার হয়েছে। সীমাহীনভাবে অনুশীলন চালিয়ে যেতে সাবস্ক্রাইব করুন।'
             : 'মডেল টেস্ট ও অনুশীলন পরীক্ষা শুধুমাত্র সাবস্ক্রাইব করা ব্যবহারকারীদের জন্য। সম্পূর্ণ নার্সিং প্রস্তুতির অভিজ্ঞতা পেতে এখনই সাবস্ক্রাইব করুন।');
 
     const handleSubscribe = () => {
@@ -113,11 +113,11 @@ export const SubscriptionRequiredScreen: React.FC<Props> = ({
                         </Text>
                         <View style={{ gap: spacing.sm }}>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                <Text variant="sm" color="textSecondary">৩ মাস</Text>
+                                <Text variant="sm" color="textSecondary">৪ মাস</Text>
                                 <Text variant="sm" weight="semibold" color="textPrimary">৩০০ টাকা</Text>
                             </View>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                <Text variant="sm" color="textSecondary">৬ মাস</Text>
+                                <Text variant="sm" color="textSecondary">৪ মাস</Text>
                                 <Text variant="sm" weight="semibold" color="textPrimary">৫০০ টাকা</Text>
                             </View>
                         </View>

@@ -25,22 +25,27 @@ type PrepCard = {
 
 const admissionCards: PrepCard[] = [
     {
-        title: 'ডিপ্লোমা ইন মিডওয়াইফারি',
+        title: 'Diploma in Nursing Science and Midwifery',
         icon: 'stethoscope',
         badge: 'Admission',
     },
     {
-        title: 'ডিপ্লোমা ইন নার্সিং সায়েন্স ও মিডওয়াইফারি',
+        title: 'Diploma in Midwifery',
         icon: 'medical-bag',
         badge: 'Admission',
     },
     {
-        title: 'বি.এসসি. ইন নার্সিং',
+        title: 'B.Sc. in Nursing Science',
         icon: 'school-outline',
         badge: 'Admission',
     },
     {
-        title: 'পোস্ট বেসিক ইন মিডওয়াইফারি',
+        title: 'Post Basic B.Sc. in Nursing Science',
+        icon: 'clipboard-check-outline',
+        badge: 'Admission',
+    },
+    {
+        title: 'Post Basic B.Sc. in Midwifery',
         icon: 'clipboard-check-outline',
         badge: 'Admission',
     },
@@ -48,23 +53,18 @@ const admissionCards: PrepCard[] = [
 
 const licenseCards: PrepCard[] = [
     {
-        title: 'ডিপ্লোমা ইন মিডওয়াইফারি',
+        title: 'Diploma in Nursing Science and Midwifery',
         icon: 'heart-pulse',
         badge: 'License',
     },
     {
-        title: 'ডিপ্লোমা ইন নার্সিং সায়েন্স ও মিডওয়াইফারি',
+        title: 'Diploma in Nursing Science',
         icon: 'hospital-box-outline',
         badge: 'License',
     },
     {
-        title: 'বি.এসসি. ইন নার্সিং',
+        title: 'B.Sc. in Nursing Science',
         icon: 'book-open-page-variant-outline',
-        badge: 'License',
-    },
-    {
-        title: 'পোস্ট বেসিক ইন মিডওয়াইফারি',
-        icon: 'certificate-outline',
         badge: 'License',
     },
 ];
@@ -230,20 +230,6 @@ export const MainScreen: React.FC<Props> = ({ navigation }) => {
                                 <Text style={styles.teamEmail}>Md.huyen40@gmail.com</Text>
                                 <Text style={styles.teamDesc}>
                                     কৌশল, মান ও একাডেমিক নির্দেশনা পরিচালনা করেন।
-                                </Text>
-                            </View>
-
-                            <View style={styles.teamCard}>
-                                <Image
-                                    source={require('../../../assets/images/system_engineer.jpg')}
-                                    style={styles.avatarImage}
-                                    resizeMode="cover"
-                                />
-                                <Text style={styles.teamName}>আফিফ আহমদ</Text>
-                                <Text style={styles.teamRole}>সিস্টেম ইঞ্জিনিয়ার</Text>
-                                <Text style={styles.teamEmail}>afif.ahmed@yahoo.com</Text>
-                                <Text style={styles.teamDesc}>
-                                    নির্ভরযোগ্য লার্নিং প্ল্যাটফর্ম তৈরি ও রক্ষণাবেক্ষণ করেন।
                                 </Text>
                             </View>
                         </View>

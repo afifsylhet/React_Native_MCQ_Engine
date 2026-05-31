@@ -31,8 +31,8 @@ interface UserListItemProps {
 }
 
 const PLAN_SHORT_LABEL: Record<'quarterly' | 'half_yearly', string> = {
-    quarterly: '৩ মাস',
-    half_yearly: '৬ মাস',
+    quarterly: '৪ মাস',
+    half_yearly: '৪ মাস',
 };
 
 const ROLE_LABEL: Record<string, string> = {
@@ -254,8 +254,8 @@ export const UserManagementScreen: React.FC<AdminStackScreenProps<'UserManagemen
                     {([
                         { id: 'all', label: 'সব' },
                         { id: 'free', label: 'ফ্রি' },
-                        { id: 'quarterly', label: '৩ মাস' },
-                        { id: 'half_yearly', label: '৬ মাস' },
+                        { id: 'quarterly', label: '৪ মাস' },
+                        { id: 'half_yearly', label: '৪ মাস' },
                     ] as const).map((option) => {
                         const isActive = subscriptionFilter === option.id;
 

@@ -94,8 +94,8 @@ export const useExam = () => {
 };
 
 /**
- * Hook to fetch the user's exam quota status (free tier only).
- * Subscribed users get unlimited = true.
+ * Hook to fetch the user's exam quota status.
+ * Free users get lifetime limits; paid users get weekly limits.
  */
 export const useQuotaStatus = () => {
     return useQuery({

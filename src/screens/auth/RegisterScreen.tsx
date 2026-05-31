@@ -41,13 +41,33 @@ const STRONG_PASSWORD_RE = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
 const PHONE_RE = /^\d{11}$/;
 const sanitizePhoneNumber = (value: string) => value.replace(/\D/g, '').slice(0, 11);
 
-const ALL_STUDENT_TYPE_OPTIONS: { value: StudentType; label: string; admissionAllowed: boolean }[] = [
-    { value: 'diploma_nursing_midwifery', label: 'Diploma in Nursing Science and Midwifery', admissionAllowed: true },
-    { value: 'diploma_midwifery', label: 'Diploma in Midwifery', admissionAllowed: true },
-    { value: 'bsc_nursing', label: 'B.Sc. in Nursing', admissionAllowed: true },
-    { value: 'post_basic_bsc_nursing', label: 'Post Basic B.Sc. in Nursing', admissionAllowed: true },
-    { value: 'post_basic_bsc_midwifery', label: 'Post Basic B.Sc. in Midwifery', admissionAllowed: true },
-];
+const ALL_STUDENT_TYPE_OPTIONS: {
+    value: StudentType;
+    label: string;
+    admissionAllowed: boolean;
+    licenseAllowed: boolean;
+}[] = [
+        {
+            value: 'diploma_nursing_midwifery',
+            label: 'Diploma in Nursing Science and Midwifery',
+            admissionAllowed: true,
+            licenseAllowed: true,
+        },
+        { value: 'diploma_midwifery', label: 'Diploma in Midwifery', admissionAllowed: true, licenseAllowed: true },
+        { value: 'bsc_nursing', label: 'B.Sc. in Nursing', admissionAllowed: true, licenseAllowed: true },
+        {
+            value: 'post_basic_bsc_nursing',
+            label: 'Post Basic B.Sc. in Nursing',
+            admissionAllowed: true,
+            licenseAllowed: false,
+        },
+        {
+            value: 'post_basic_bsc_midwifery',
+            label: 'Post Basic B.Sc. in Midwifery',
+            admissionAllowed: true,
+            licenseAllowed: false,
+        },
+    ];
 
 export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
     const { register } = useAuth();
@@ -85,6 +105,7 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
         return ALL_STUDENT_TYPE_OPTIONS.filter((opt) => {
             // Filter out types not allowed for this exam
             if (formData.examType === 'admission' && !opt.admissionAllowed) return false;
+            if (formData.examType === 'license' && !opt.licenseAllowed) return false;
             // Filter out locked types — they should not appear in the dropdown at all
             if (isStudentTypeLocked(opt.value, formData.examType)) return false;
             return true;
@@ -93,11 +114,11 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
 
     const getLockedStudentTypes = () => {
         if (!formData.examType) return [];
-        return ALL_STUDENT_TYPE_OPTIONS.filter(
-            (opt) =>
-                (formData.examType !== 'admission' || opt.admissionAllowed) &&
-                isStudentTypeLocked(opt.value, formData.examType)
-        );
+        return ALL_STUDENT_TYPE_OPTIONS.filter((opt) => {
+            if (formData.examType === 'admission' && !opt.admissionAllowed) return false;
+            if (formData.examType === 'license' && !opt.licenseAllowed) return false;
+            return isStudentTypeLocked(opt.value, formData.examType);
+        });
     };
 
     const validateForm = (): boolean => {

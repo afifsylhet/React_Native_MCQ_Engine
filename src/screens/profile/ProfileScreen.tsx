@@ -23,8 +23,8 @@ import { ProfileStackScreenProps } from '../../navigation/types';
 import { formatDate, formatNumber } from '../../utils/formatters';
 
 const PLAN_DISPLAY_LABEL: Record<string, string> = {
-    quarterly: '৩ মাস',
-    half_yearly: '৬ মাস',
+    quarterly: '৪ মাস',
+    half_yearly: '৪ মাস',
 };
 
 const daysUntil = (iso?: string) => {

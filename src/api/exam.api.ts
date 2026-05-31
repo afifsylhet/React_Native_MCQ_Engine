@@ -46,10 +46,16 @@ interface ExamAnswer {
 
 export interface QuotaStatus {
     hasActiveSubscription: boolean;
-    unlimited: boolean;
-    monthlyQuota: number | null;
+    limitType: 'weekly' | 'lifetime';
+    limit: number | null;
     used: number;
     remaining: number | null;
+    weekStartDate?: string | null;
+    canStart?: {
+        25: boolean;
+        50: boolean;
+        100: boolean;
+    };
 }
 
 /**

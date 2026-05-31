@@ -9,6 +9,7 @@ import {
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 import Toast from 'react-native-toast-message';
+import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { ScreenWrapper } from '../../components/ui/ScreenWrapper';
 import { Button } from '../../components/ui/Button';
@@ -20,6 +21,8 @@ import { typography } from '../../theme/typography';
 import { spacing } from '../../theme/spacing';
 import { useMyModuleStatus, useSubscription } from '../../hooks/useSubscription';
 import { ProfileStackScreenProps } from '../../navigation/types';
+import { supportSettingsApi } from '../../api/supportSettings.api';
+import { queryKeys } from '../../api/queryClient';
 
 type PlansScreenProps = ProfileStackScreenProps<'Plans'>;
 type PaidPlanId = 'quarterly' | 'half_yearly';
@@ -28,6 +31,7 @@ interface SubscriptionPlan {
     id: string;
     title: string;
     price: string;
+    priceValue: number;
     period: string;
     description: string;
     badge?: string;
@@ -39,6 +43,14 @@ export const PlansScreen: React.FC<PlansScreenProps> = ({ navigation }) => {
     const { subscribe, isSubscribing, mySubscription } = useSubscription();
     const { data: moduleStatus, isFetching: isModuleStatusFetching } = useMyModuleStatus();
     const [selectedPlan, setSelectedPlan] = useState<string>('quarterly');
+    const { data: supportSettings } = useQuery({
+        queryKey: queryKeys.settings.support,
+        queryFn: () => supportSettingsApi.getSupportSettings(),
+        staleTime: 5 * 60 * 1000,
+    });
+    const bkashSendMoneyNumber = supportSettings?.bkashSendMoneyNumber?.trim() || '—';
+    const whatsAppNumber = supportSettings?.whatsAppNumber?.trim() || '—';
+    const supportEmail = supportSettings?.supportEmail?.trim() || '—';
     const [transactionId, setTransactionId] = useState('');
     const [paymentAmount, setPaymentAmount] = useState('');
     const [formErrors, setFormErrors] = useState<{
@@ -70,11 +82,12 @@ export const PlansScreen: React.FC<PlansScreenProps> = ({ navigation }) => {
             id: 'free',
             title: 'ফ্রি',
             price: '৳০',
+            priceValue: 0,
             period: '/চিরকাল',
             description: 'প্রত্যেক নতুন ব্যবহারকারীর জন্য ডিফল্ট প্ল্যান',
             features: [
-                { icon: 'check', text: 'সাপ্তাহিক ৪০০ প্রশ্নের সীমা', included: true },
-                { icon: 'check', text: 'পূর্বের সালের প্রশ্নে অ্যাক্সেস', included: true },
+                { icon: 'check', text: 'লাইফটাইম ৫০০ প্রশ্নের সীমা', included: true },
+                { icon: 'check', text: 'পূর্বের পরীক্ষার প্রশ্ন (সীমিত)', included: true },
                 { icon: 'close', text: 'মডেল টেস্ট', included: false },
                 { icon: 'close', text: 'বিষয়ভিত্তিক অনুশীলন', included: false },
                 { icon: 'close', text: 'প্রাধান্যমূলক সহায়তা', included: false },
@@ -82,30 +95,32 @@ export const PlansScreen: React.FC<PlansScreenProps> = ({ navigation }) => {
         },
         {
             id: 'quarterly',
-            title: '৩ মাস',
+            title: '৪ মাস',
             price: '৳৩০০',
-            period: '/৩ মাস',
-            description: 'মনোযোগী পরীক্ষা প্রস্তুতির জন্য দারুণ',
+            priceValue: 300,
+            period: '/৪ মাস',
+            description: 'নিয়মিত পড়াশোনার জন্য স্ট্যান্ডার্ড প্ল্যান',
             features: [
-                { icon: 'check', text: 'সাপ্তাহিক ৯০০ প্রশ্নের সীমা', included: true },
+                { icon: 'check', text: 'সাপ্তাহিক ১৪০০ প্রশ্নের সীমা', included: true },
                 { icon: 'check', text: 'বিস্তারিত বিশ্লেষণ', included: true },
-                { icon: 'check', text: '৯০ দিনের অ্যাক্সেস', included: true },
+                { icon: 'check', text: '১২০ দিনের অ্যাক্সেস', included: true },
                 { icon: 'check', text: 'সাপ্তাহিক লিডারবোর্ড', included: true },
                 { icon: 'check', text: 'প্রাধান্যমূলক সহায়তা', included: true },
             ],
         },
         {
             id: 'half_yearly',
-            title: '৬ মাস',
+            title: '৪ মাস',
             price: '৳৫০০',
-            period: '/৬ মাস',
-            description: 'গুরুতর শিক্ষার্থীদের জন্য সেরা মূল্য',
+            priceValue: 500,
+            period: '/৪ মাস',
+            description: 'দ্রুত প্রস্তুতির জন্য উচ্চতর সীমা',
             badge: 'জনপ্রিয়',
             isPopular: true,
             features: [
-                { icon: 'check', text: 'সাপ্তাহিক ১২০০ প্রশ্নের সীমা', included: true },
+                { icon: 'check', text: 'সাপ্তাহিক ৩০০০ প্রশ্নের সীমা', included: true },
                 { icon: 'check', text: 'ছোট প্ল্যানের তুলনায় সাশ্রয়', included: true },
-                { icon: 'check', text: '১৮০ দিনের অ্যাক্সেস', included: true },
+                { icon: 'check', text: '১২০ দিনের অ্যাক্সেস', included: true },
                 { icon: 'check', text: 'সাপ্তাহিক লিডারবোর্ড', included: true },
                 { icon: 'check', text: 'প্রাধান্যমূলক সহায়তা', included: true },
             ],
@@ -115,8 +130,7 @@ export const PlansScreen: React.FC<PlansScreenProps> = ({ navigation }) => {
     const getPlanPrice = (planId: PaidPlanId): number => {
         const matchedPlan = plans.find((p) => p.id === planId);
         if (!matchedPlan) return 0;
-        const numeric = Number(matchedPlan.price.replace(/[^\d.]/g, ''));
-        return Number.isFinite(numeric) ? numeric : 0;
+        return Number.isFinite(matchedPlan.priceValue) ? matchedPlan.priceValue : 0;
     };
 
     const handlePlanSelect = (planId: PaidPlanId) => {
@@ -127,6 +141,12 @@ export const PlansScreen: React.FC<PlansScreenProps> = ({ navigation }) => {
             paymentAmount: undefined,
         }));
     };
+
+    useEffect(() => {
+        if (selectedPlan !== 'free') {
+            setPaymentAmount(String(getPlanPrice(selectedPlan as PaidPlanId)));
+        }
+    }, [selectedPlan]);
 
     const handleSubscribe = (planId: PaidPlanId) => {
         if (isProcessing || isSubscribing) return;
@@ -418,6 +438,47 @@ export const PlansScreen: React.FC<PlansScreenProps> = ({ navigation }) => {
                                     অ্যাডমিন আপনার সাবস্ক্রিপশন যাচাই ও অনুমোদনের জন্য এই তথ্যগুলো জমা দিন।
                                 </Text>
 
+                                <Card
+                                    style={{
+                                        backgroundColor: colors.primaryLight,
+                                        borderLeftWidth: 4,
+                                        borderLeftColor: colors.primary,
+                                        marginBottom: spacing.base,
+                                    }}
+                                >
+                                    <Text
+                                        style={{
+                                            fontSize: typography.scale.sm.fontSize,
+                                            fontFamily: typography.fontBody,
+                                            fontWeight: typography.weights.semibold,
+                                            color: colors.textPrimary,
+                                            marginBottom: spacing.xs,
+                                        }}
+                                    >
+                                        বিকাশ পেমেন্ট (শুধু Send Money)
+                                    </Text>
+                                    <Text
+                                        style={{
+                                            fontSize: typography.scale.sm.fontSize,
+                                            fontFamily: typography.fontDisplay,
+                                            fontWeight: typography.weights.bold,
+                                            color: colors.primary,
+                                            marginBottom: spacing.xs,
+                                        }}
+                                    >
+                                        {bkashSendMoneyNumber}
+                                    </Text>
+                                    <Text
+                                        style={{
+                                            fontSize: typography.scale.xs.fontSize,
+                                            fontFamily: typography.fontBody,
+                                            color: colors.textSecondary,
+                                        }}
+                                    >
+                                        শুধু Send Money অপশন ব্যবহার করে পেমেন্ট করুন।
+                                    </Text>
+                                </Card>
+
                                 <Text
                                     style={{
                                         fontSize: typography.scale.xs.fontSize,
@@ -438,8 +499,8 @@ export const PlansScreen: React.FC<PlansScreenProps> = ({ navigation }) => {
                                     }}
                                 >
                                     {([
-                                        { id: 'quarterly', label: '৩ মাস', price: 300 },
-                                        { id: 'half_yearly', label: '৬ মাস', price: 500 },
+                                        { id: 'quarterly', label: '৪ মাস', price: 300 },
+                                        { id: 'half_yearly', label: '৪ মাস', price: 500 },
                                     ] as const).map((planOption) => {
                                         const isActive = selectedPlan === planOption.id;
 
@@ -521,6 +582,7 @@ export const PlansScreen: React.FC<PlansScreenProps> = ({ navigation }) => {
                                     error={formErrors.paymentAmount}
                                     leftIcon="cash"
                                     keyboardType="numeric"
+                                    editable={false}
                                 />
 
                                 <Button
@@ -542,100 +604,9 @@ export const PlansScreen: React.FC<PlansScreenProps> = ({ navigation }) => {
                     ) : null}
                 </View>
 
-                {/* Terms */}
-                <Animated.View
-                    entering={FadeInDown.delay(400)}
-                    style={{
-                        paddingHorizontal: spacing.base,
-                        paddingVertical: spacing.lg,
-                    }}
-                >
-                    <Card
-                        style={{
-                            backgroundColor: colors.primaryLight,
-                            borderLeftWidth: 4,
-                            borderLeftColor: colors.primary,
-                        }}
-                    >
-                        <View style={{ gap: spacing.sm }}>
-                            <View
-                                style={{
-                                    flexDirection: 'row',
-                                    alignItems: 'center',
-                                    gap: spacing.md,
-                                }}
-                            >
-                                <MaterialCommunityIcons
-                                    name="shield-check"
-                                    size={20}
-                                    color={colors.primary}
-                                />
-                                <Text
-                                    style={{
-                                        fontSize: typography.scale.xs.fontSize,
-                                        fontFamily: typography.fontBody,
-                                        color: colors.textPrimary,
-                                        flex: 1,
-                                    }}
-                                >
-                                    বাতিল না করলে স্বয়ংক্রিয়ভাবে মাসিক নবায়ন হবে
-                                </Text>
-                            </View>
-
-                            <View
-                                style={{
-                                    flexDirection: 'row',
-                                    alignItems: 'center',
-                                    gap: spacing.md,
-                                }}
-                            >
-                                <MaterialCommunityIcons
-                                    name="lock"
-                                    size={20}
-                                    color={colors.primary}
-                                />
-                                <Text
-                                    style={{
-                                        fontSize: typography.scale.xs.fontSize,
-                                        fontFamily: typography.fontBody,
-                                        color: colors.textPrimary,
-                                        flex: 1,
-                                    }}
-                                >
-                                    এনক্রিপ্টেড চেকআউটে নিরাপদ পেমেন্ট
-                                </Text>
-                            </View>
-
-                            <View
-                                style={{
-                                    flexDirection: 'row',
-                                    alignItems: 'center',
-                                    gap: spacing.md,
-                                }}
-                            >
-                                <MaterialCommunityIcons
-                                    name="arrow-left"
-                                    size={20}
-                                    color={colors.primary}
-                                />
-                                <Text
-                                    style={{
-                                        fontSize: typography.scale.xs.fontSize,
-                                        fontFamily: typography.fontBody,
-                                        color: colors.textPrimary,
-                                        flex: 1,
-                                    }}
-                                >
-                                    ৭ দিনের মানি-ব্যাক গ্যারান্টি
-                                </Text>
-                            </View>
-                        </View>
-                    </Card>
-                </Animated.View>
-
                 {/* Support */}
                 <Animated.View
-                    entering={FadeInDown.delay(450)}
+                    entering={FadeInDown.delay(400)}
                     style={{
                         paddingHorizontal: spacing.base,
                         paddingVertical: spacing.lg,
@@ -643,27 +614,36 @@ export const PlansScreen: React.FC<PlansScreenProps> = ({ navigation }) => {
                         gap: spacing.md,
                     }}
                 >
-                    <Text
-                        style={{
-                            fontSize: typography.scale.sm.fontSize,
-                            fontFamily: typography.fontBody,
-                            color: colors.textSecondary,
-                        }}
-                    >
-                        কোনো প্রশ্ন আছে?
-                    </Text>
-                    <TouchableOpacity>
+                    <Card style={{ width: '100%', gap: spacing.sm }}>
                         <Text
                             style={{
                                 fontSize: typography.scale.sm.fontSize,
                                 fontFamily: typography.fontBody,
                                 fontWeight: typography.weights.semibold,
-                                color: colors.primary,
+                                color: colors.textPrimary,
                             }}
                         >
-                            আমাদের সাপোর্ট টিমের সাথে যোগাযোগ করুন →
+                            সহায়তা দরকার?
                         </Text>
-                    </TouchableOpacity>
+                        <Text
+                            style={{
+                                fontSize: typography.scale.sm.fontSize,
+                                fontFamily: typography.fontBody,
+                                color: colors.textSecondary,
+                            }}
+                        >
+                            WhatsApp: {whatsAppNumber}
+                        </Text>
+                        <Text
+                            style={{
+                                fontSize: typography.scale.sm.fontSize,
+                                fontFamily: typography.fontBody,
+                                color: colors.textSecondary,
+                            }}
+                        >
+                            Email: {supportEmail}
+                        </Text>
+                    </Card>
                 </Animated.View>
 
                 <View style={{ height: spacing.lg }} />

@@ -14,7 +14,8 @@ type Props = NativeStackScreenProps<SubscriptionStackParamList, 'SubscriptionInf
 interface PlanInfo {
     name: string;
     banglaName: string;
-    weeklyLimit: number;
+    limitType: 'weekly' | 'lifetime';
+    limit: number;
     exams25: number;
     exams50: number;
     exams100: number;
@@ -26,30 +27,33 @@ const PLANS: PlanInfo[] = [
     {
         name: 'free',
         banglaName: 'ফ্রি প্ল্যান',
-        weeklyLimit: 400,
-        exams25: 16,
-        exams50: 8,
-        exams100: 4,
+        limitType: 'lifetime',
+        limit: 500,
+        exams25: 20,
+        exams50: 10,
+        exams100: 5,
         color: '#6B7280',
         badgeColor: '#F3F4F6',
     },
     {
         name: 'quarterly',
-        banglaName: '৩ মাসের প্ল্যান',
-        weeklyLimit: 900,
-        exams25: 36,
-        exams50: 18,
-        exams100: 9,
+        banglaName: '৪ মাসের প্ল্যান',
+        limitType: 'weekly',
+        limit: 1400,
+        exams25: 56,
+        exams50: 28,
+        exams100: 14,
         color: '#3B82F6',
         badgeColor: '#EFF6FF',
     },
     {
         name: 'half_yearly',
-        banglaName: '৬ মাসের প্ল্যান',
-        weeklyLimit: 1200,
-        exams25: 48,
-        exams50: 24,
-        exams100: 12,
+        banglaName: '৪ মাসের প্ল্যান',
+        limitType: 'weekly',
+        limit: 3000,
+        exams25: 120,
+        exams50: 60,
+        exams100: 30,
         color: '#7C3AED',
         badgeColor: '#F5F3FF',
     },
@@ -72,7 +76,7 @@ export const SubscriptionInfoScreen: React.FC<Props> = ({ navigation }) => {
                         সাবস্ক্রিপশন তথ্য
                     </Text>
                     <Text style={{ fontSize: 13, color: '#6B7280', marginTop: 2 }}>
-                        সাপ্তাহিক প্রশ্ন সীমা ও পরীক্ষার সুবিধা
+                        প্রশ্ন সীমা ও পরীক্ষার সুবিধা
                     </Text>
                 </View>
             </View>
@@ -116,7 +120,9 @@ export const SubscriptionInfoScreen: React.FC<Props> = ({ navigation }) => {
                             }}
                         >
                             <Text style={{ fontSize: 12, fontWeight: '600', color: plan.color }}>
-                                {plan.weeklyLimit} প্রশ্ন/সপ্তাহ
+                                {plan.limitType === 'weekly'
+                                    ? `${plan.limit} প্রশ্ন/সপ্তাহ`
+                                    : `লাইফটাইম ${plan.limit} প্রশ্ন`}
                             </Text>
                         </View>
                     </View>
@@ -131,7 +137,7 @@ export const SubscriptionInfoScreen: React.FC<Props> = ({ navigation }) => {
                         }}
                     >
                         <Text style={{ fontSize: 13, fontWeight: '600', color: '#374151', marginBottom: 8 }}>
-                            পরীক্ষার সংখ্যা (সাপ্তাহিক)
+                            পরীক্ষার সংখ্যা ({plan.limitType === 'weekly' ? 'সাপ্তাহিক' : 'লাইফটাইম'})
                         </Text>
                         {[
                             { count: 25, exams: plan.exams25 },
@@ -176,7 +182,7 @@ export const SubscriptionInfoScreen: React.FC<Props> = ({ navigation }) => {
                             style={{ marginRight: 6, marginTop: 1 }}
                         />
                         <Text style={{ fontSize: 12, color: '#92400E', flex: 1, lineHeight: 18 }}>
-                            মিশ্র ব্যবহার সম্ভব। যেমন: ২টি ১০০ প্রশ্ন + ৩টি ৫০ প্রশ্ন + ২টি ২৫ প্রশ্নের পরীক্ষা — যতক্ষণ মোট সাপ্তাহিক সীমার মধ্যে থাকে।
+                            মিশ্র ব্যবহার সম্ভব। যেমন: ২টি ১০০ প্রশ্ন + ৩টি ৫০ প্রশ্ন + ২টি ২৫ প্রশ্নের পরীক্ষা — যতক্ষণ মোট {plan.limitType === 'weekly' ? 'সাপ্তাহিক' : 'লাইফটাইম'} সীমার মধ্যে থাকে।
                         </Text>
                     </View>
 
@@ -187,9 +193,16 @@ export const SubscriptionInfoScreen: React.FC<Props> = ({ navigation }) => {
                             alignItems: 'center',
                         }}
                     >
-                        <MaterialCommunityIcons name="refresh" size={14} color={plan.color} style={{ marginRight: 5 }} />
+                        <MaterialCommunityIcons
+                            name={plan.limitType === 'weekly' ? 'refresh' : 'lock'}
+                            size={14}
+                            color={plan.color}
+                            style={{ marginRight: 5 }}
+                        />
                         <Text style={{ fontSize: 12, color: '#6B7280' }}>
-                            প্রতি সোমবার সাপ্তাহিক সীমা রিসেট হয়
+                            {plan.limitType === 'weekly'
+                                ? 'প্রতি সোমবার সাপ্তাহিক সীমা রিসেট হয়'
+                                : 'লাইফটাইম সীমা পুনরায় সেট হয় না'}
                         </Text>
                     </View>
                 </View>
@@ -213,8 +226,8 @@ export const SubscriptionInfoScreen: React.FC<Props> = ({ navigation }) => {
                     </Text>
                 </View>
                 <Text style={{ fontSize: 13, color: '#7F1D1D', lineHeight: 20 }}>
-                    উদাহরণ: আপনি ২টি ১০০ প্রশ্ন (= ২০০) + ৭টি ২৫ প্রশ্ন (= ১৭৫) পরীক্ষা দিয়েছেন। মোট ব্যবহার = ৩৭৫।{'\n\n'}
-                    ফ্রি প্ল্যানে (৪০০ সীমা): আপনি আর ৫০ বা ১০০ প্রশ্নের পরীক্ষা শুরু করতে পারবেন না। কারণ এতে সাপ্তাহিক সীমা ছাড়িয়ে যাবে।{'\n\n'}
+                    উদাহরণ: আপনি ৩টি ১০০ প্রশ্ন (= ৩০০) + ৪টি ৫০ প্রশ্ন (= ২০০) পরীক্ষা দিয়েছেন। মোট ব্যবহার = ৫০০।{`\n\n`}
+                    ফ্রি প্ল্যানে (লাইফটাইম ৫০০ সীমা): আপনি আর নতুন পরীক্ষা শুরু করতে পারবেন না।{`\n\n`}
                     সিস্টেম স্বয়ংক্রিয়ভাবে পরীক্ষা শুরু আটকে দেবে এবং বাকি সীমা দেখাবে।
                 </Text>
             </View>
@@ -236,8 +249,8 @@ export const SubscriptionInfoScreen: React.FC<Props> = ({ navigation }) => {
                     </Text>
                 </View>
                 <Text style={{ fontSize: 13, color: '#14532D', lineHeight: 20 }}>
-                    প্রতি সোমবার সকাল ১২:০০ AM (UTC) তে আপনার সাপ্তাহিক প্রশ্ন গণনা রিসেট হয়।
-                    রিসেটের পর আপনি পুনরায় সম্পূর্ণ সাপ্তাহিক সীমা ব্যবহার করতে পারবেন।
+                    পেইড প্ল্যানে প্রতি সোমবার সকাল ১২:০০ AM (UTC) তে সাপ্তাহিক প্রশ্ন গণনা রিসেট হয়।
+                    ফ্রি প্ল্যানে লাইফটাইম সীমা পুনরায় সেট হয় না।
                 </Text>
             </View>
         </ScrollView>

@@ -18,8 +18,8 @@ import Toast from 'react-native-toast-message';
 
 type AdminPlanId = 'quarterly' | 'half_yearly';
 const PLAN_LABEL: Record<AdminPlanId, string> = {
-    quarterly: '৩ মাস',
-    half_yearly: '৬ মাস',
+    quarterly: '৪ মাস',
+    half_yearly: '৪ মাস',
 };
 
 const ROLE_LABEL: Record<string, string> = {

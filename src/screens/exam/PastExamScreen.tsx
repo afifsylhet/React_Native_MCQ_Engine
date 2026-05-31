@@ -107,6 +107,7 @@ export const PastExamScreen: React.FC<PastExamScreenProps> = ({
         ) {
             navigation.navigate('SubscriptionRequired', {
                 reason: 'quota_exceeded',
+                message: 'ফ্রি প্ল্যানে সর্বোচ্চ ৫০০টি প্রশ্ন ব্যবহার হয়েছে। পূর্বের পরীক্ষার প্রশ্ন চালিয়ে যেতে সাবস্ক্রাইব করুন।',
             });
             return;
         }
@@ -160,7 +161,7 @@ export const PastExamScreen: React.FC<PastExamScreenProps> = ({
 
             <View style={{ paddingHorizontal: spacing.base, gap: spacing.base }}>
                 {/* Free-tier quota banner */}
-                {quota && !quota.hasActiveSubscription && quota.monthlyQuota !== null && (
+                {quota && !quota.hasActiveSubscription && quota.limit !== null && (
                     <Animated.View entering={FadeInDown.delay(50)}>
                         <Card
                             style={{
@@ -203,8 +204,8 @@ export const PastExamScreen: React.FC<PastExamScreenProps> = ({
                                         }}
                                     >
                                         {quota.remaining === 0
-                                            ? 'এই মাসের ফ্রি কোটা শেষ হয়ে গেছে'
-                                            : `এই মাসে ${quota.monthlyQuota}টির মধ্যে ${quota.remaining}টি ফ্রি সুযোগ বাকি`}
+                                            ? 'ফ্রি প্ল্যানে সর্বোচ্চ ৫০০টি প্রশ্ন ব্যবহার হয়ে গেছে'
+                                            : `ফ্রি প্ল্যানে মোট ${quota.limit}টির মধ্যে ${quota.remaining}টি প্রশ্ন বাকি`}
                                     </Text>
                                     <Text
                                         style={{
@@ -214,7 +215,7 @@ export const PastExamScreen: React.FC<PastExamScreenProps> = ({
                                             marginTop: spacing.xs,
                                         }}
                                     >
-                                        অসীম পূর্বের পরীক্ষার অনুশীলনের জন্য সাবস্ক্রাইব করুন।
+                                        পূর্বের পরীক্ষার প্রশ্ন চালিয়ে যেতে সাবস্ক্রাইব করুন।
                                     </Text>
                                 </View>
                             </View>

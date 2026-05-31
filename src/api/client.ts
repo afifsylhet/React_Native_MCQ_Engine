@@ -67,6 +67,13 @@ apiClient.interceptors.request.use(
             if (accessToken) {
                 config.headers.Authorization = `Bearer ${accessToken}`;
             }
+            // Log API requests for debugging
+            if (__DEV__) {
+                console.log(
+                    `[API] ${config.method?.toUpperCase()} ${config.url}`,
+                    config.data ? `Data: ${JSON.stringify(config.data).substring(0, 100)}` : ''
+                );
+            }
         } catch (error) {
             console.error('[API] Error reading access token:', error);
         }
@@ -97,8 +104,23 @@ export const setAuthFailureHandler = (handler: () => void) => {
 };
 
 apiClient.interceptors.response.use(
-    (response) => response,
+    (response) => {
+        if (__DEV__) {
+            console.log(`[API] Response: ${response.status} from ${response.config.url}`);
+        }
+        return response;
+    },
     async (error) => {
+        // Log API errors for debugging
+        console.error(
+            '[API Error]',
+            error.config?.url,
+            'Status:',
+            error.response?.status,
+            'Message:',
+            error.message
+        );
+
         // Handle network errors first - show alert and reject
         if (isNetworkError(error)) {
             showNetworkErrorAlert();
