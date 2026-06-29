@@ -12,6 +12,15 @@
         }
       }
     },
+    "production-aab": {
+      "android": {
+        "credentialsSource": "local",
+        "buildType": "app-bundle",
+        "env": {
+          "EXPO_PUBLIC_API_URL": "https://mcq.developerafif.tech/api/v1"
+        }
+      }
+    },
     "production": {
       "android": {
         "buildType": "apk",

@@ -133,3 +133,6 @@ secrets.env
 *.log.json
 *.tap
 junit.xml
+
+# EAS Local Keystore Credentials
+credentials.json

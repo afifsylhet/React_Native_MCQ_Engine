@@ -1,8 +1,8 @@
 {
   "expo": {
     "name": "BD Nursing Preparation",
-    "slug": "nurseprep-app",
-    "version": "1.0.0",
+    "slug": "bd_nursing_preparation",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -19,9 +19,10 @@
     },
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "com.nurseprep.app"
+      "bundleIdentifier": "com.afifahmed.bdnursingpreparation_v1"
     },
     "android": {
+      "versionCode": 3,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#0F7B6C"
@@ -30,7 +31,7 @@
         "RECEIVE_BOOT_COMPLETED",
         "VIBRATE"
       ],
-      "package": "com.nurseprep.app"
+      "package": "com.afifahmed.bdnursingpreparation_v1"
     },
     "plugins": [
       [
@@ -42,9 +43,8 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "71ac8206-ed24-4581-b737-3cd3dafc07a3"
+        "projectId": "ca818564-44f3-4ec7-a1a7-1a510889f42d"
       }
-    },
-    "owner": "afifsylhet"
+    }
   }
 }
